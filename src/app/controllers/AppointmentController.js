@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { startOfHour, parseISO, isBefore } from 'date-fns';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
+import File from '../models/File';
 
 class AppointmentController {
   async store(req, res) {
@@ -50,13 +51,35 @@ class AppointmentController {
     });
 
     if (checkAvailability) {
-      res.status(400).json({ error: 'Appointment date is not available' });
+      return res
+        .status(400)
+        .json({ error: 'Appointment date is not available' });
     }
 
     const appointment = await Appointment.create({
       user_id: req.userId,
       provider_id,
       date: hourStart, // using the hour start just allows to create appoitment at the begining of each hour
+    });
+
+    return res.json(appointment);
+  }
+
+  async index(req, res) {
+    const appointment = await Appointment.findAll({
+      where: { user_id: req.userId, canceled_at: null },
+      oder: ['date'],
+      attributes: ['id', 'date'],
+      include: {
+        model: User,
+        as: 'provider',
+        attributes: ['id', 'name'],
+        include: {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'], // need to return path becuse file get url needs it
+        },
+      },
     });
 
     return res.json(appointment);
