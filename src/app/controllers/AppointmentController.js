@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import en from 'date-fns/locale/en-US';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async store(req, res) {
@@ -44,7 +46,7 @@ class AppointmentController {
      */
     const checkAvailability = await Appointment.findOne({
       where: {
-        // provider_id,
+        provider_id,
         canceled_at: null,
         date: hourStart,
       },
@@ -60,6 +62,18 @@ class AppointmentController {
       user_id: req.userId,
       provider_id,
       date: hourStart, // using the hour start just allows to create appoitment at the begining of each hour
+    });
+
+    /**
+     * Notify provider
+     */
+    const user = await User.findByPk(req.userId);
+    const formatedDate = format(hourStart, "MMMM dd', at' H:mm'h'", {
+      locale: en,
+    });
+    await Notification.create({
+      content: `New appoitment from ${user.name} on ${formatedDate}`,
+      user: provider_id,
     });
 
     return res.json(appointment);
