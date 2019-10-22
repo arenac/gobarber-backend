@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'path';
 import * as Sentry from '@sentry/node';
-import routes from './routes';
-import sentryConfig from './config/sentry';
-
+import Youch from 'youch';
 // catch error inside async methods. So this
 import 'express-async-error';
+import routes from './routes';
+import sentryConfig from './config/sentry';
 
 import './database';
 
@@ -17,6 +17,7 @@ class App {
 
     this.middlewares();
     this.routes();
+    this.exceptionHandler();
   }
 
   middlewares() {
@@ -31,6 +32,15 @@ class App {
   routes() {
     this.server.use(routes);
     this.server.use(Sentry.Handlers.errorHandler());
+  }
+
+  exceptionHandler() {
+    // when express receives a middleware with four parameters, this means for it
+    // a middleware to treat exeption
+    this.server.use(async (err, req, res, next) => {
+      const errors = await new Youch(err, req).toJSON();
+      return res.status(500).json(errors);
+    });
   }
 }
 
