@@ -4,6 +4,9 @@ import * as Sentry from '@sentry/node';
 import routes from './routes';
 import sentryConfig from './config/sentry';
 
+// catch error inside async methods. So this
+import 'express-async-error';
+
 import './database';
 
 class App {
