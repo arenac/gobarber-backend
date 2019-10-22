@@ -1098,6 +1098,11 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+express-async-error@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/express-async-error/-/express-async-error-0.0.2.tgz#6a008690283b252100f41fb00a7496fc25d06bf3"
+  integrity sha1-agCGkCg7JSEA9B+wCnSW/CXQa/M=
+
 express-handlebars@^3.0.0, express-handlebars@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/express-handlebars/-/express-handlebars-3.1.0.tgz#c177ee9a81f6a2abada6b550b77b3e30c6bc0796"
