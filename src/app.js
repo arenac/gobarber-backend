@@ -1,9 +1,9 @@
 import express from 'express';
 import path from 'path';
-import * as Sentry from '@sentry/node';
 import Youch from 'youch';
-// catch error inside async methods. So this
-import 'express-async-error';
+import * as Sentry from '@sentry/node';
+// catch error inside async methods. Should be imported before routes
+import 'express-async-errors';
 import routes from './routes';
 import sentryConfig from './config/sentry';
 
