@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import Youch from 'youch';
 import * as Sentry from '@sentry/node';
 // catch error inside async methods. Should be imported before routes
@@ -23,6 +24,10 @@ class App {
 
   middlewares() {
     this.server.use(Sentry.Handlers.requestHandler());
+    /**
+     * When in production, cors({origin: 'https://domain.allowed.to.access.the.api'})
+     */
+    this.server.use(cors());
     this.server.use(express.json());
     this.server.use(
       '/files',
