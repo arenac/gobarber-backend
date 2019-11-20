@@ -18,9 +18,10 @@ const upload = multer(multerConfig);
 
 routes.post('/sessions', SessionController.store);
 
+routes.post('/users', UserController.store);
+
 routes.use(authMiddleware); // add the this middleware for all routes from here to the bottom
 
-routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
 
 routes.get('/providers', ProviderController.index);
