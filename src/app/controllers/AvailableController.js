@@ -50,7 +50,6 @@ class AvailableController {
       '20:00',
       '21:00',
       '22:00',
-      '23:00',
     ];
 
     const available = schedule.map(time => {
